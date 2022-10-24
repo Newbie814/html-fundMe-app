@@ -29,10 +29,11 @@ h2 {
   margin-bottom: 1rem;
 }
 
-.connectBtn {
+.btn {
   width: 10rem;
   padding: 0.5rem;
   border-radius: 5px;
   color: white;
   background-color: #1e88e5;
+  margin-bottom: 0.25rem;
 }

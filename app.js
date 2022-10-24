@@ -1,5 +1,12 @@
-const connectSuccess = document.getElementById('connectButton');
+import { ethers } from './ethers-5.6.esm.min.js';
+import { abi, contractAddress } from './constants.js';
+
+const connectButton = document.getElementById('connect-button');
+const fundButton = document.getElementById('fund-button');
 const tagLine = document.querySelector('.tagline');
+
+connectButton.onclick = connect;
+fundButton.onclick = fund;
 
 // async function connect() {
 //   if (typeof window.ethereum !== 'undefined') {
@@ -25,5 +32,22 @@ async function connect() {
     console.log(accounts);
   } else {
     connectButton.innerHTML = 'Please install MetaMask';
+  }
+}
+
+async function fund() {
+  const ethAmount = '77';
+  console.log(`Funding with ${ethAmount} ETH`);
+  if (typeof window.ethereum !== 'undefined') {
+    // provider
+    // signer
+    // contract interacting with
+    // ABI and address
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+    const txResponse = await contract.fund({
+      value: ethers.utils.parseEther(ethAmount),
+    });
   }
 }

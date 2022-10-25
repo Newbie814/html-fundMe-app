@@ -46,8 +46,26 @@ async function fund() {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(contractAddress, abi, signer);
-    const txResponse = await contract.fund({
-      value: ethers.utils.parseEther(ethAmount),
-    });
+    try {
+      const txResponse = await contract.fund({
+        value: ethers.utils.parseEther(ethAmount),
+      });
+      await listenForTransactionMine(txResponse, provider);
+      console.log('Funding complete');
+    } catch (error) {
+      console.log(error);
+    }
+  } else {
+    fundButton.innerHTML = 'Please install MetaMask';
   }
+}
+
+function listenForTransactionMine(txResponse, provider) {
+  console.log(`Transaction hash: ${txResponse.hash}..`);
+  return new Promise((resolve, reject) => {
+    provider.once(txResponse.hash, (txReceipt) => {
+      console.log(`Completed with ${txReceipt.confirmations} confirmations`);
+      resolve();
+    });
+  });
 }
